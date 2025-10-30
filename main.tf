@@ -4,6 +4,9 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~>3.100.0"
     }
+    random = {
+      source = "hashicorp/random"
+    }
   }
 
   backend "local" {
@@ -15,22 +18,28 @@ provider "azurerm" {
   features {}
 }
 
-# Free resource group
+# Random suffix to avoid naming collisions
+resource "random_integer" "suffix" {
+  min = 1000
+  max = 9999
+}
+
+# Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "flask-free-rg"
   location = "Central India"
 }
 
-# Free App Service Plan (F1 = Free)
+# App Service Plan (Free Tier)
 resource "azurerm_service_plan" "plan" {
   name                = "flask-free-plan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "F1" # Free tier
+  sku_name            = "F1"
 }
 
-# Free Web App (pulls image from GitHub Container Registry)
+# Linux Web App connected to GHCR image
 resource "azurerm_linux_web_app" "app" {
   name                = "flask-free-webapp-${random_integer.suffix.result}"
   location            = azurerm_resource_group.rg.location
@@ -39,14 +48,18 @@ resource "azurerm_linux_web_app" "app" {
 
   site_config {
     always_on = false
+
     application_stack {
-      docker_image_name     = "ghcr.io/muneesh08/flask-app"
-      docker_image_tag = "latest"
+      docker_image_name = "ghcr.io/muneesh08/flask-app"
+      docker_image_tag  = "latest"
     }
   }
 
   app_settings = {
     WEBSITES_PORT = "5000"
+    DOCKER_REGISTRY_SERVER_URL      = "https://ghcr.io"
+    DOCKER_REGISTRY_SERVER_USERNAME = "muneesh08"
+    DOCKER_REGISTRY_SERVER_PASSWORD = "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"
   }
 
   identity {
@@ -54,16 +67,6 @@ resource "azurerm_linux_web_app" "app" {
   }
 }
 
-# Generate random suffix for unique name
-resource "random_integer" "suffix" {
-  min = 1000
-  max = 9999
-}
-
 output "webapp_url" {
   value = azurerm_linux_web_app.app.default_hostname
 }
-
-
-
-
