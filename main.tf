@@ -50,7 +50,7 @@ resource "azurerm_linux_web_app" "app" {
     always_on = false
 
     application_stack {
-      docker_image_name = "ghcr.io/muneesh08/flask-app"
+      docker_image = "ghcr.io/muneesh08/flask-app"
       docker_image_tag  = "latest"
     }
   }
@@ -70,3 +70,4 @@ resource "azurerm_linux_web_app" "app" {
 output "webapp_url" {
   value = azurerm_linux_web_app.app.default_hostname
 }
+
