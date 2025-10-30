@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Warden Registration - HostelSys{% endblock %}
+{% block content %}
+  <div class="card" style="max-width: 500px; margin: 2rem auto;">
+    <h2>👨‍💼 Warden Registration</h2>
+    <p style="text-align: center; margin-bottom: 2rem; opacity: 0.8;">
+      Register as a hostel administrator
+    </p>
+    
+    <form method="post">
+      
+      <label>
+        👤 Full Name
+        <input name="name" required placeholder="Enter your full name">
+      </label>
+      
+      <label>
+        📧 Email Address
+        <input name="email" type="email" required placeholder="Enter your email">
+      </label>
+      
+      <label>
+        🔒 Password
+        <input name="password" type="password" required placeholder="Create a strong password">
+      </label>
+      
+      <label>
+        🔑 College Key
+        <input name="college_key" required placeholder="Enter admin-provided college key">
+        <small style="opacity: 0.7; font-size: 0.9rem; margin-top: 0.5rem;">
+          This key is provided by the college administration
+        </small>
+      </label>
+      
+      <button type="submit">Register as Warden</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+      <p style="opacity: 0.8;">Already have an account?</p>
+      <a href="/warden/login" class="btn-secondary">Login Here</a>
+    </div>
+  </div>
+{% endblock %}

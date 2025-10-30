@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Warden AI Assistant</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f7f9fc;
+            padding: 40px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        textarea, input {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .generate-btn { background-color: #0066ff; color: white; }
+        .copy-btn { background-color: #00b894; color: white; }
+        .send-btn { background-color: #ff7675; color: white; }
+        pre {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 120px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🏢 Warden AI Notice Generator</h2>
+        <p>Enter what you want to announce and let AI generate the notice.</p>
+        <textarea id="prompt" rows="4" placeholder="Example: Ask students to submit hostel fees before Friday..."></textarea>
+        <button class="generate-btn" onclick="generateText()">Generate Notice</button>
+
+        <h3>Generated Notice:</h3>
+        <pre id="output"></pre>
+
+        <button class="copy-btn" onclick="copyText()">Copy Text</button>
+        <button class="send-btn" onclick="confirmSend()">Send Mail</button>
+    </div>
+
+    <script>
+        async function generateText() {
+            const prompt = document.getElementById("prompt").value;
+            document.getElementById("output").innerText = "Generating...";
+            const response = await fetch("/warden/ai_generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt })
+            });
+            const data = await response.json();
+            document.getElementById("output").innerText = data.text || data.error;
+        }
+
+        function copyText() {
+            const text = document.getElementById("output").innerText;
+            navigator.clipboard.writeText(text);
+            alert("✅ Text copied!");
+        }
+
+        async function confirmSend() {
+            const confirmSend = confirm("Send this notice to all approved students?");
+            if (!confirmSend) return;
+
+            const message = document.getElementById("output").innerText;
+            const response = await fetch("/warden/send_notice", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message })
+            });
+            const data = await response.json();
+            alert(data.status || data.error);
+        }
+    </script>
+</body>
+</html>

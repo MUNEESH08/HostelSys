@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}Warden Dashboard - HostelSys{% endblock %}
+{% block content %}
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <div class="stat-number">{{ pending_students|length }}</div>
+      <div class="stat-label">Pending Approvals</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ requests|length }}</div>
+      <div class="stat-label">Room Requests</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">{{ rooms|length }}</div>
+      <div class="stat-label">Total Rooms</div>
+    </div>
+  </div>
+
+  <h2>Warden Dashboard 👨‍💼</h2>
+
+  <div class="card">
+    <h3>⏳ Pending Student Approvals</h3>
+    {% for s in pending_students %}
+      <div class="dashboard-item">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+          <div>
+            <strong>{{ s.name }}</strong><br>
+            <span style="opacity: 0.8;">{{ s.email }}</span>
+          </div>
+          <div class="action-buttons">
+            <a href="/warden/approve_student/{{ s._id }}" class="approve">✓ Approve</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="dashboard-item" style="text-align: center; opacity: 0.7;">
+        <p>🎉 No pending student approvals</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <h3>🏠 Room Requests</h3>
+    {% for r in requests %}
+      <div class="dashboard-item">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+          <div>
+            <strong>{{ r.student.name }}</strong> applied for room <strong style="color: var(--accent-orange);">{{ r.room.room_no }}</strong><br>
+            <span style="opacity: 0.8;">{{ r.room.room_type }} - {{ r.room.ac_type }}</span>
+          </div>
+          <div class="action-buttons">
+            <a href="/warden/approve_request/{{ r.req._id }}" class="approve">✓ Approve</a>
+            <a href="/warden/reject_request/{{ r.req._id }}" class="reject">✗ Reject</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="dashboard-item" style="text-align: center; opacity: 0.7;">
+        <p>📬 No pending room requests</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <h3>🏢 Room Management</h3>
+    
+    <div style="margin-bottom: 2rem;">
+      <h4 style="color: var(--accent-orange); margin-bottom: 1rem;">➕ Add New Room</h4>
+      <form method="post" action="/warden/room/add" style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: var(--border-radius);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+          <label>
+            Room Number
+            <input name="room_no" required placeholder="e.g., 101">
+          </label>
+          <label>
+            Capacity
+            <input name="vacancies" required type="number" min="1" placeholder="e.g., 2">
+          </label>
+          <label>
+            Room Type
+            <input name="room_type" placeholder="e.g., Double">
+          </label>
+          <label>
+            AC Type
+            <select name="ac_type">
+              <option value="AC">AC</option>
+              <option value="Non-AC">Non-AC</option>
+            </select>
+          </label>
+        </div>
+        <button type="submit" style="margin-top: 1rem;">Add Room</button>
+      </form>
+    </div>
+
+    <h4 style="color: var(--accent-orange); margin-bottom: 1rem;">📋 Existing Rooms</h4>
+    {% for room in rooms %}
+      <div class="dashboard-item">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+          <div>
+            <strong style="color: var(--accent-cyan);">Room {{ room.room_no }}</strong><br>
+            <span>Capacity: {{ room.vacancies }} | Type: {{ room.room_type }} | {{ room.ac_type }}</span><br>
+            <span style="opacity: 0.8;">Occupants: {{ room.current_students }}/{{ room.vacancies }}</span>
+          </div>
+          <div class="action-buttons">
+            <a href="/warden/room/edit/{{ room._id }}" class="edit">✏️ Edit</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

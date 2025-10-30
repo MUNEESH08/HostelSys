@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Student Dashboard - HostelSys{% endblock %}
+{% block content %}
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <div class="stat-number">{{ 'YES' if student.approved else 'NO' }}</div>
+      <div class="stat-label">Approval Status</div>
+    </div>
+    {% if room %}
+    <div class="stat-card">
+      <div class="stat-number">{{ room.room_no }}</div>
+      <div class="stat-label">Your Room</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <h2>Hello, {{ student.name }}! 👋</h2>
+  
+  {% if not student.approved %}
+    <div class="alert alert-warning">
+      Your account is pending approval by the warden. Please wait for confirmation.
+    </div>
+  {% endif %}
+  
+  {% if room %}
+    <div class="card">
+      <h3>🏠 Your Room Details</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        <div class="dashboard-item">
+          <strong>Room Number:</strong><br>
+          <span style="font-size: 1.2rem; color: var(--accent-orange);">{{ room.room_no }}</span>
+        </div>
+        <div class="dashboard-item">
+          <strong>Room Type:</strong><br>
+          <span style="font-size: 1.2rem;">{{ room.room_type }}</span>
+        </div>
+        <div class="dashboard-item">
+          <strong>AC Type:</strong><br>
+          <span style="font-size: 1.2rem;">{{ room.ac_type }}</span>
+        </div>
+        <div class="dashboard-item">
+          <strong>Capacity:</strong><br>
+          <span style="font-size: 1.2rem;">{{ room.vacancies }} beds</span>
+        </div>
+        <div class="dashboard-item">
+          <strong>Current Occupants:</strong><br>
+          <span style="font-size: 1.2rem; color: var(--accent-cyan);">{{ room.students|length }}/{{ room.vacancies }}</span>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="card">
+      <h3>🏠 Room Assignment</h3>
+      <p>You don't have a room assigned yet.</p>
+      {% if student.approved %}
+        <a href="/student/rooms" class="btn" style="margin-top: 1rem;">Request a Room</a>
+      {% else %}
+        <p style="color: var(--warning); margin-top: 1rem;">Please wait for account approval before requesting a room.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}

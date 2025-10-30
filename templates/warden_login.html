@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Warden Login - HostelSys{% endblock %}
+{% block content %}
+  <div class="card" style="max-width: 500px; margin: 2rem auto;">
+    <h2>👨‍💼 Warden Login</h2>
+    <p style="text-align: center; margin-bottom: 2rem; opacity: 0.8;">
+      Access the management portal
+    </p>
+    
+    <form method="post">
+      <label>
+        📧 Email Address
+        <input name="email" type="email" required placeholder="Enter your email">
+      </label>
+      
+      <label>
+        🔒 Password
+        <input name="password" type="password" required placeholder="Enter your password">
+      </label>
+      
+      <button type="submit">Access Dashboard</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+      <p style="opacity: 0.8;">Need a warden account?</p>
+      <a href="/warden/register" class="btn-secondary">Register as Warden</a>
+    </div>
+  </div>
+{% endblock %}

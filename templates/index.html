@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}HostelSys - Modern Hostel Management{% endblock %}
+{% block content %}
+  <div class="card">
+    <h2>Welcome to HostelSys</h2>
+    <p style="font-size: 1.2rem; text-align: center; margin-bottom: 3rem; opacity: 0.9;">
+      Your comprehensive solution for modern hostel management
+    </p>
+    
+    <div class="welcome-grid">
+      <div class="role-card">
+        <h3>👨‍🎓 Student Portal</h3>
+        <p style="margin-bottom: 2rem; opacity: 0.8;">
+          Register, request rooms, and manage your hostel stay
+        </p>
+        <div class="role-links">
+          <a href="/student/login">Login</a>
+          <a href="/student/register">Register</a>
+        </div>
+      </div>
+      
+      <div class="role-card">
+        <h3>👨‍💼 Warden Portal</h3>
+        <p style="margin-bottom: 2rem; opacity: 0.8;">
+          Manage students, rooms, and hostel operations
+        </p>
+        <div class="role-links">
+          <a href="/warden/login">Login</a>
+          <a href="/warden/register">Register</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
