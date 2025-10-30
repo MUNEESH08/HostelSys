@@ -40,7 +40,7 @@ resource "azurerm_linux_web_app" "app" {
   site_config {
     always_on = false
     application_stack {
-      docker_image     = "ghcr.io/Muneesh08/flask-app"
+      docker_image_name     = "ghcr.io/Muneesh08/flask-app"
       docker_image_tag = "latest"
     }
   }
@@ -63,5 +63,6 @@ resource "random_integer" "suffix" {
 output "webapp_url" {
   value = azurerm_linux_web_app.app.default_hostname
 }
+
 
 
