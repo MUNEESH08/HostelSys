@@ -5,7 +5,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Give Actions permission to push images to GHCR
 permissions:
   contents: read
   packages: write
@@ -38,7 +37,8 @@ jobs:
 
       - name: "Build Docker image"
         run: |
-          docker build -t ghcr.io/${{ env.LOWER_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+          docker build --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" \
+                       -t ghcr.io/${{ env.LOWER_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
 
       - name: "Login to GHCR"
         run: |
@@ -48,7 +48,9 @@ jobs:
         run: |
           docker push ghcr.io/${{ env.LOWER_USER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-      - name: "Terraform Init & Apply (Deploy to Free Tier App Service)"
+      - name: "Terraform Init & Apply"
+        env:
+          TF_VAR_ghcr_token: ${{ secrets.GHCR_TOKEN }}
         run: |
           terraform init -input=false
           terraform apply -auto-approve -input=false
