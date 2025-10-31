@@ -8,10 +8,7 @@ import os
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev_secret_for_local_testing')
-app.config['MONGO_URI'] = os.environ.get(
-    'MONGO_URI',
-    'mongodb+srv://Muneesh:MI5y8ckbp7QUtTGs@cluster0.vpnqgja.mongodb.net/hosteldb?retryWrites=true&w=majority&appName=Cluster0'
-)
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI', '')
 app.permanent_session_lifetime = timedelta(minutes=30)
 COLLEGE_KEY = 'Rec#1234'
 
@@ -415,3 +412,4 @@ def send_notice():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
