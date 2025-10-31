@@ -56,7 +56,7 @@ jobs:
 
       - name: "Terraform Init & Apply"
         env:
-          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          TF_VAR_ghcr_token: ${{ secrets.GHCR_TOKEN }}
         run: |
           set +x
           terraform init -input=false
