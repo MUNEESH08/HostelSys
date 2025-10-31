@@ -59,7 +59,7 @@ resource "azurerm_linux_web_app" "app" {
     WEBSITES_PORT = "5000"
     DOCKER_REGISTRY_SERVER_URL      = "https://ghcr.io"
     DOCKER_REGISTRY_SERVER_USERNAME = "muneesh08"
-    DOCKER_REGISTRY_SERVER_PASSWORD = "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"
+    DOCKER_REGISTRY_SERVER_PASSWORD = var.ghcr_token
   }
 
   identity {
@@ -70,4 +70,5 @@ resource "azurerm_linux_web_app" "app" {
 output "webapp_url" {
   value = azurerm_linux_web_app.app.default_hostname
 }
+
 
