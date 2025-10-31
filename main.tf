@@ -18,19 +18,21 @@ provider "azurerm" {
   features {}
 }
 
-# Random suffix to avoid naming collisions
+variable "ghcr_token" {
+  type      = string
+  sensitive = true
+}
+
 resource "random_integer" "suffix" {
   min = 1000
   max = 9999
 }
 
-# Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "flask-free-rg"
   location = "Central India"
 }
 
-# App Service Plan (Free Tier)
 resource "azurerm_service_plan" "plan" {
   name                = "flask-free-plan"
   location            = azurerm_resource_group.rg.location
@@ -39,7 +41,6 @@ resource "azurerm_service_plan" "plan" {
   sku_name            = "F1"
 }
 
-# Linux Web App connected to GHCR image
 resource "azurerm_linux_web_app" "app" {
   name                = "flask-free-webapp-${random_integer.suffix.result}"
   location            = azurerm_resource_group.rg.location
@@ -50,14 +51,14 @@ resource "azurerm_linux_web_app" "app" {
     always_on = false
 
     application_stack {
-      docker_image = "ghcr.io/muneesh08/flask-app"
+      docker_image      = "ghcr.io/muneesh08/flask-app"
       docker_image_tag  = "latest"
     }
   }
 
   app_settings = {
-    WEBSITES_PORT = "5000"
-    DOCKER_REGISTRY_SERVER_URL      = "https://ghcr.io"
+    WEBSITES_PORT                 = "5000"
+    DOCKER_REGISTRY_SERVER_URL    = "https://ghcr.io"
     DOCKER_REGISTRY_SERVER_USERNAME = "muneesh08"
     DOCKER_REGISTRY_SERVER_PASSWORD = var.ghcr_token
   }
@@ -70,5 +71,3 @@ resource "azurerm_linux_web_app" "app" {
 output "webapp_url" {
   value = azurerm_linux_web_app.app.default_hostname
 }
-
-
