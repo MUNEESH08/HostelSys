@@ -29,7 +29,7 @@ resource "random_integer" "suffix" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "flask-free-rg"
+  name     = "flask-free-rg-${random_integer.suffix.result}"
   location = "Central India"
 }
 
@@ -71,3 +71,4 @@ resource "azurerm_linux_web_app" "app" {
 output "webapp_url" {
   value = azurerm_linux_web_app.app.default_hostname
 }
+
