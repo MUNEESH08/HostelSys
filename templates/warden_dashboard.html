@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 {% block title %}Warden Dashboard - HostelSys{% endblock %}
 {% block content %}
+<div style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem;">
+    <a href="/warden/ai_bot" 
+       class="ai-btn" 
+       style="
+         background: var(--accent-cyan);
+         padding: 0.7rem 1.2rem;
+         border-radius: var(--border-radius);
+         font-weight: bold;
+         text-decoration: none;
+         color: white;
+         transition: 0.2s;
+       "
+       onmouseover="this.style.opacity=0.8"
+       onmouseout="this.style.opacity=1"
+    >
+      🤖 AI Feature
+    </a>
+  </div>
   <div class="dashboard-stats">
     <div class="stat-card">
       <div class="stat-number">{{ pending_students|length }}</div>
